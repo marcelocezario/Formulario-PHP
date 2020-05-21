@@ -3,7 +3,7 @@ $email = 'marcelocezario@gmail.com';
 $emailcc = 'marcelohcezario@gmail.com';
 $nome = utf8_decode($_POST['nome']);
 $assunto = utf8_decode($_POST['assunto']);
-$mensagem = utf8_decode($_POST['mensagem']);
+$mensagem = utf8_decode(nl2br($_POST['mensagem']));
 
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
@@ -47,9 +47,8 @@ try {
     $mail->AltBody = $mensagem;
 
     $mail->send();
-    echo 'Message has been sent';
+    header('location:index.php?envio=ok');
 } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
 
-header('location:index.php?envio=ok');
