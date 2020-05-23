@@ -1,9 +1,14 @@
 <?php
-$email = 'marcelocezario@gmail.com';
-$emailcc = 'marcelohcezario@gmail.com';
-$nome = utf8_decode($_POST['nome']);
-$assunto = utf8_decode($_POST['assunto']);
-$mensagem = utf8_decode(nl2br($_POST['mensagem']));
+$usuarioGmail = '';
+$senhaGmail = '';
+
+$emailEnvio = '';
+$emailEnvioCc = '';
+
+$email = $_POST['email'];
+$nome = $_POST['nome'];
+$assunto = $_POST['assunto'];
+$mensagem = $_POST['mensagem'];
 
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
@@ -23,17 +28,17 @@ try {
     $mail->isSMTP();                                            // Send using SMTP
     $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-    $mail->Username   = '';                     // SMTP username
-    $mail->Password   = '';                               // SMTP password
+    $mail->Username   = $usuarioGmail;                     // SMTP username
+    $mail->Password   = $senhaGmail;                               // SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
     $mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
     //Recipients
-    $mail->setFrom('testesmhc@gmail.com', $nome);
-    $mail->addAddress($email, utf8_decode('Formulário de contato'));     // Add a recipient
+    $mail->setFrom($usuarioGmail, utf8_decode($nome));
+    $mail->addAddress($emailEnvio, utf8_decode('Formulário'));     // Add a recipient
 #    $mail->addAddress('ellen@example.com');               // Name is optional
-#    $mail->addReplyTo('info@example.com', 'Information');
-    $mail->addCC($emailcc);
+    $mail->addReplyTo($email, utf8_decode($nome));
+#    $mail->addCC($emailEnvioCc);
 #    $mail->addBCC('bcc@example.com');
 
     // Attachments
@@ -42,13 +47,13 @@ try {
 
     // Content
     $mail->isHTML(true);                                  // Set email format to HTML
-    $mail->Subject = $assunto;
-    $mail->Body    = $mensagem;
-    $mail->AltBody = $mensagem;
+    $mail->Subject = utf8_decode("Contato: ".$assunto);
+    $mail->Body    = utf8_decode(nl2br($mensagem."\n\n".$nome."\n".$email));
+    $mail->AltBody = utf8_decode(nl2br($mensagem."\n\n".$nome."\n".$email));
 
     $mail->send();
-    header('location:index.php?envio=ok');
+    header('location:index.php?envio=sucess');
 } catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    header('location:index.php?envio=error&email='.$email.'&nome='.$nome.'&assunto='.$assunto.'&mensagem='.urlencode($mensagem));
 }
 
