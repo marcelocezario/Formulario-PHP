@@ -36,6 +36,9 @@ try {
     //Recipients
     $mail->setFrom($usuarioGmail, utf8_decode($nome));
     $mail->addAddress($emailEnvio, utf8_decode('Formulário'));     // Add a recipient
+    if(isset($_POST['receberCopia'])){
+        $mail->addAddress($email, utf8_decode($nome));
+    }
 #    $mail->addAddress('ellen@example.com');               // Name is optional
     $mail->addReplyTo($email, utf8_decode($nome));
 #    $mail->addCC($emailEnvioCc);

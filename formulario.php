@@ -61,7 +61,11 @@ if (isset($_GET['envio'])) {
         <label for="mensagem">Qual a sua mensagem?</label>
         <textarea class="form-control" name="mensagem" rows="3" placeholder="Digite sua mensagem"><?php echo $mensagem;?></textarea>
 
-        <input type="submit" value="Enviar mensagem" onclick="return validar()">
+        <input type="checkbox" name="receberCopia">
+        <label class="form-check-label">Receber uma cópia da mensagem no e-mail?</label>
+        <br><br>
+
+        <input type="submit" class="btn btn-primary" value="Enviar mensagem" onclick="return validar()">
 
         <br><br>
 
